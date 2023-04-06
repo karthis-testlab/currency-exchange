@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS currency_exchange (id integer NOT NULL, convertion_multiple decimal(5, 2), currency_from varchar(3), currency_to varchar(3), PRIMARY KEY(id));
