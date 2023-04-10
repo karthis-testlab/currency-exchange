@@ -1,5 +1,7 @@
 package com.ta.api.assessment.currency.exchange.currencyexchange.controllers;
 
+import com.ta.api.assessment.currency.exchange.currencyexchange.models.ApplicationConfigModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,17 +18,20 @@ public class ApplicationConfigController {
     @Value("${api.keys.accounts.service}")
     private String accountServiceKey;
 
-    @Value("${db.host.names:dev.database.com}")
+    @Value("${db.hostname:dev.database.com}")
     private String dbHostName;
 
-    @Value("${db.user.name}")
+    @Value("${db.username}")
     private String dbUserName;
 
-    @Value("${db.user.credentials}")
+    @Value("${db.usercredentials}")
     private String dbUserCredentials;
 
-    @Value("${db.number.of.connections}")
+    @Value("${db.connections}")
     private String dbNumberOfConnections;
+
+    @Autowired
+    private ApplicationConfigModel applicationConfig;
 
     @GetMapping("/keys/{service}")
     public String getApiServiceKey(@PathVariable String service) {
@@ -55,6 +60,11 @@ public class ApplicationConfigController {
     @GetMapping("/db/connections")
     public String getDbNumberOfConnections() {
         return dbNumberOfConnections;
+    }
+
+    @GetMapping("/db")
+    public String getDbDetails() {
+        return "| "+applicationConfig.getHostname()+" | "+applicationConfig.getUsername()+" | "+applicationConfig.getUsercredentials()+" | "+applicationConfig.getConnections()+" |";
     }
 
 }
