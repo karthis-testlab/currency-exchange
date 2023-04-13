@@ -1,8 +1,11 @@
 package com.ta.api.assessment.currency.exchange.currencyexchange.controllers;
 
 import com.ta.api.assessment.currency.exchange.currencyexchange.models.ApplicationConfigModel;
+import com.ta.api.assessment.currency.exchange.currencyexchange.models.DatabaseConfigModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/config")
+@RefreshScope
 public class ApplicationConfigController {
+
+    @Autowired
+    DatabaseConfigModel databaseConfigModel;
 
     @Value("${api.keys.orders.service}")
     private String orderServiceKey;
@@ -65,6 +72,10 @@ public class ApplicationConfigController {
     @GetMapping("/db")
     public String getDbDetails() {
         return "| "+applicationConfig.getHostname()+" | "+applicationConfig.getUsername()+" | "+applicationConfig.getUsercredentials()+" | "+applicationConfig.getConnections()+" |";
+    }
+    @GetMapping("/db/properties")
+    public ResponseEntity<DatabaseConfigModel> getDbConfig() {
+        return ResponseEntity.ok(databaseConfigModel);
     }
 
 }
